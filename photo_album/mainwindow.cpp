@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <Wizard.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -33,7 +35,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::SlotCreatePro()
 {
-    qDebug()<< " create file is triggered" <<Qt::endl;
+    Wizard* wizard = new Wizard();
+    wizard->show();
 }
 
 void MainWindow::SlotOpenPro()
