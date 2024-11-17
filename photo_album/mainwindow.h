@@ -26,5 +26,7 @@ private:
 private slots:
     void SlotCreatePro();
     void SlotOpenPro();
+signals:
+    void SigOpenPro(const QString& );
 };
 #endif // MAINWINDOW_H

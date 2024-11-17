@@ -3,6 +3,7 @@
 #include "protreeitem.h"
 #include "const.h"
 #include "qheaderview.h"
+#include "removeprodialog.h"
 
 #include <QDir>
 #include <QGuiApplication>
@@ -128,6 +129,36 @@ void ProTreeWidget::SlotSetActive(){
 }
 
 void ProTreeWidget::SlotClosePro(){
+    if(!_right_item){
+        return;
+    }
+
+    RemoveProDIalog remove_dialog(this);
+    if(remove_dialog.exec() != QDialog::Accepted){
+        return;
+    }
+
+    bool is_remove = remove_dialog.isRemove();
+    auto index_right_btn = this->indexOfTopLevelItem(_right_item);
+    auto* protreeitem = static_cast<ProTreeItem*>(_right_item);
+    auto* selecedItem = static_cast<ProTreeItem*>(_selected_item);
+    QString delete_path = protreeitem->GetPath();
+    _set_path.remove(delete_path);
+    if(is_remove){
+        QDir delete_dir(delete_path);
+        delete_dir.removeRecursively();
+    }
+
+    if(_active_item == _right_item){
+        _active_item = nullptr;
+    }
+
+    if(selecedItem && protreeitem == selecedItem->GetRoot()){
+        _selected_item = nullptr;
+        //emit SigClearSelected();
+    }
+    delete this->takeTopLevelItem(index_right_btn);
+    _right_item = nullptr;
 
 }
 
@@ -142,15 +173,73 @@ void ProTreeWidget::SlotUpdateProgress(int count){
 }
 void ProTreeWidget::SlotFinishProgress(){
     if (_dialog_progress) {
-        emit SigCancelProgress();
+        _dialog_progress->setValue(PROGRESS_MAX);
         _dialog_progress->deleteLater();
         _dialog_progress = nullptr;
     }
 }
 void ProTreeWidget::SlotCancelProgress(){
     if (_dialog_progress) {
-        _dialog_progress->setValue(PROGRESS_MAX);
+        emit SigCancelProgress();
         _dialog_progress->deleteLater();
         _dialog_progress = nullptr;
+    }
+}
+
+void ProTreeWidget::SlotOpenPro(const QString& path){
+    if(_set_path.find(path) != _set_path.end()){
+        qDebug() << "file has loaded" << Qt::endl;
+        return;
+    }
+
+    _set_path.insert(path);
+    int file_count = 0;
+    QDir pro_dir(path);
+    const QString& proname = pro_dir.dirName();
+
+    _thread_open_pro = std::make_shared<OpenTreeThread>(path, file_count, this, nullptr);
+
+    _open_progressdlg = new QProgressDialog(this);
+
+    //连接更新进度框操作
+    connect(_thread_open_pro.get(), &OpenTreeThread::SigUpdateProgress,
+            this, &ProTreeWidget::SlotUpOpenProgress);
+
+    connect(_thread_open_pro.get(), &OpenTreeThread::SigFinishProgress, this,
+            &ProTreeWidget::SlotFinishOpenProgress);
+
+    connect(_open_progressdlg, &QProgressDialog::canceled, this, &ProTreeWidget::SlotCancelOpenProgress);
+
+    connect(this, &ProTreeWidget::SigCancelOpenProgress, _thread_open_pro.get(), &OpenTreeThread::SlotCancelOpenProgress);
+
+    _thread_open_pro->start();
+    _open_progressdlg->setWindowTitle("Please wait...");
+    _open_progressdlg->setFixedWidth(PROGRESS_WIDTH);
+    _open_progressdlg->setRange(0, PROGRESS_MAX);
+    _open_progressdlg->exec();
+}
+
+void ProTreeWidget::SlotUpOpenProgress(int count){
+    qDebug() << "count is " << count;
+    if(!_open_progressdlg){
+        qDebug() << "dialog_progress is empty!!!" << Qt::endl;
+        return;
+    }
+
+    _open_progressdlg->setValue(count%PROGRESS_MAX);
+}
+
+void ProTreeWidget::SlotFinishOpenProgress(){
+    if (_open_progressdlg) {
+        _open_progressdlg->setValue(PROGRESS_MAX);
+        _open_progressdlg->deleteLater();
+        _open_progressdlg = nullptr;
+    }
+}
+void ProTreeWidget::SlotCancelOpenProgress(){
+    if (_open_progressdlg) {
+        emit SigCancelOpenProgress();
+        _open_progressdlg->deleteLater();
+        _open_progressdlg = nullptr;
     }
 }

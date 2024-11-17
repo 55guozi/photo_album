@@ -17,3 +17,7 @@ void ProTree::AddProtoTree(const QString name, const QString path)
 {
     ui->treeWidget->AddProToTree(name, path);
 }
+
+QTreeWidget* ProTree::GetTreeWidget(){
+    return ui->treeWidget;
+}

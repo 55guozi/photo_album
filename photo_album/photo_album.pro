@@ -12,22 +12,26 @@ SOURCES += \
     confirmpage.cpp \
     main.cpp \
     mainwindow.cpp \
+    opentreethread.cpp \
     prosetpage.cpp \
     protree.cpp \
     protreeitem.cpp \
     protreethread.cpp \
     protreewidget.cpp \
+    removeprodialog.cpp \
     wizard.cpp
 
 HEADERS += \
     confirmpage.h \
     const.h \
     mainwindow.h \
+    opentreethread.h \
     prosetpage.h \
     protree.h \
     protreeitem.h \
     protreethread.h \
     protreewidget.h \
+    removeprodialog.h \
     wizard.h
 
 FORMS += \
@@ -35,6 +39,7 @@ FORMS += \
     mainwindow.ui \
     prosetpage.ui \
     protree.ui \
+    removeprodialog.ui \
     wizard.ui
 
 # Default rules for deployment.

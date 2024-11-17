@@ -15,6 +15,7 @@ class ProTree : public QDialog
 public:
     explicit ProTree(QWidget *parent = nullptr);
     ~ProTree();
+    QTreeWidget* GetTreeWidget();
 
 private:
     Ui::ProTree *ui;

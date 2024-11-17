@@ -118,7 +118,7 @@ void ProTreeThread::CreateProTree(const QString &src_path, const QString &dist_p
         }
     }
     parent_item->setExpanded(true);
-    self->collapseItem(parent_item);
+    //self->collapseItem(parent_item);
 }
 
 void ProTreeThread::SlotCancelProgress(){
