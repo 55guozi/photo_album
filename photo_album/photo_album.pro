@@ -15,6 +15,7 @@ SOURCES += \
     prosetpage.cpp \
     protree.cpp \
     protreeitem.cpp \
+    protreethread.cpp \
     protreewidget.cpp \
     wizard.cpp
 
@@ -25,6 +26,7 @@ HEADERS += \
     prosetpage.h \
     protree.h \
     protreeitem.h \
+    protreethread.h \
     protreewidget.h \
     wizard.h
 
