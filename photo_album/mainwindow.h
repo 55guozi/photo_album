@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTreeWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,6 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QWidget* _protree;
 
 
 private slots:

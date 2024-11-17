@@ -15,8 +15,14 @@ public:
     explicit Wizard(QWidget *parent = nullptr);
     ~Wizard();
 
+protected:
+    void done(int result) override;
+
 private:
     Ui::Wizard *ui;
+
+signals:
+    void SigProSettings(const QString name, const QString path);
 };
 
 #endif // WIZARD_H
