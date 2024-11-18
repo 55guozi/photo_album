@@ -32,7 +32,7 @@ public slots:
     void SlotUpdatePic(const QString& path);
     void SlotDeleteItem();
 private slots:
-    void on_preBtn_clicked();
+    void on_previousBtn_clicked();
     void on_nextBtn_clicked();
 signals:
     void SigNextClicked();

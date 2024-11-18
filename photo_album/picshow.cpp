@@ -139,7 +139,7 @@ void PicShow::SlotDeleteItem()
 
 
 
-void PicShow::on_preBtn_clicked()
+void PicShow::on_previousBtn_clicked()
 {
     emit SigPreClicked();
 }
