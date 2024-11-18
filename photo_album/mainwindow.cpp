@@ -1,9 +1,10 @@
 #include "mainwindow.h"
+#include "picshow.h"
 #include "protree.h"
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
-#include <Wizard.h>
+#include <wizard.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,6 +36,15 @@ MainWindow::MainWindow(QWidget *parent)
     QTreeWidget* tree_widget = static_cast<ProTree*>(_protree)->GetTreeWidget();
     auto* pro_tree_widget = static_cast<ProTreeWidget*>(tree_widget);
     connect(this, &MainWindow::SigOpenPro, pro_tree_widget, &ProTreeWidget::SlotOpenPro);
+
+    _picshow = new PicShow();
+    ui->picLayout->addWidget(_picshow);
+    auto * pro_pic_show = dynamic_cast<PicShow*>(_picshow);
+    connect(pro_tree_widget, &ProTreeWidget::SigUpdateSelected, pro_pic_show, &PicShow::SlotDoubleClickItem);
+
+    connect(pro_pic_show, &PicShow::SigPreClicked,pro_tree_widget,&ProTreeWidget::SlotPreShow);
+    connect(pro_pic_show, &PicShow::SigNextClicked,pro_tree_widget,&ProTreeWidget::SlotNextShow);
+    connect(pro_tree_widget,&ProTreeWidget::SigUpdatePic,pro_pic_show,&PicShow::SlotUpdatePic);
 }
 
 MainWindow::~MainWindow()
@@ -73,4 +83,11 @@ void MainWindow::SlotOpenPro()
 
     QString file_name = fileNames.at(0);
     emit SigOpenPro(file_name);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    auto * pro_pic_show = dynamic_cast<PicShow*>(_picshow);
+    pro_pic_show->ReloadPic();
+    QMainWindow::resizeEvent(event);
 }

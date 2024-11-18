@@ -23,6 +23,8 @@ ProTreeWidget::ProTreeWidget(QWidget *parent )
     connect(_action_import, &QAction::triggered, this, &ProTreeWidget::SlotImport);
     connect(_action_setstart, &QAction::triggered, this, &ProTreeWidget::SlotSetActive);
     connect(_action_closepro, &QAction::triggered, this, &ProTreeWidget::SlotClosePro);
+
+    connect(this, &ProTreeWidget::itemDoubleClicked, this, &ProTreeWidget::SlotDoubleClickItem);
 }
 
 void ProTreeWidget::AddProToTree(const QString& name, const QString& path){
@@ -242,4 +244,49 @@ void ProTreeWidget::SlotCancelOpenProgress(){
         _open_progressdlg->deleteLater();
         _open_progressdlg = nullptr;
     }
+}
+
+void ProTreeWidget::SlotDoubleClickItem(QTreeWidgetItem *item, int column){
+    if(QGuiApplication::mouseButtons() != Qt::LeftButton){
+        return;
+    }
+
+    auto *tree_doubleItem = static_cast<ProTreeItem*>(item);
+    if(!tree_doubleItem){
+        return;
+    }
+
+    int item_type = tree_doubleItem->type();
+    if(item_type == TreeItemPic){
+        emit SigUpdateSelected(tree_doubleItem->GetPath());
+        _selected_item = tree_doubleItem;
+    }
+}
+
+void ProTreeWidget::SlotPreShow(){
+    if(!_selected_item){
+        return;
+    }
+
+    auto * curItem = dynamic_cast<ProTreeItem*>(dynamic_cast<ProTreeItem*>(_selected_item)->GetPreItem());
+    if(!curItem){
+        return;
+    }
+    emit SigUpdatePic(curItem->GetPath());
+    _selected_item = curItem;
+    this->setCurrentItem(curItem);
+}
+
+void ProTreeWidget::SlotNextShow(){
+    if(!_selected_item){
+        return;
+    }
+
+    auto * curItem = dynamic_cast<ProTreeItem*>(dynamic_cast<ProTreeItem*>(_selected_item)->GetNextItem());
+    if(!curItem){
+        return;
+    }
+    emit SigUpdatePic(curItem->GetPath());
+    _selected_item = curItem;
+    this->setCurrentItem(curItem);
 }
