@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
-#include <Wizard.h>
+#include <wizard.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

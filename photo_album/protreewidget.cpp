@@ -70,6 +70,7 @@ void ProTreeWidget::SlotItemPressed(QTreeWidgetItem *item, int column)
 void ProTreeWidget::SlotImport()
 {
     QFileDialog fileDialog;
+    fileDialog.setOption(QFileDialog::DontUseNativeDialog, true);
     fileDialog.setFileMode(QFileDialog::Directory);
     fileDialog.setWindowTitle(tr("选择导入文件"));
 
