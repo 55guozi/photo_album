@@ -13,6 +13,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     opentreethread.cpp \
+    picbutton.cpp \
+    picshow.cpp \
     prosetpage.cpp \
     protree.cpp \
     protreeitem.cpp \
@@ -26,6 +28,8 @@ HEADERS += \
     const.h \
     mainwindow.h \
     opentreethread.h \
+    picbutton.h \
+    picshow.h \
     prosetpage.h \
     protree.h \
     protreeitem.h \
@@ -37,6 +41,7 @@ HEADERS += \
 FORMS += \
     confirmpage.ui \
     mainwindow.ui \
+    picshow.ui \
     prosetpage.ui \
     protree.ui \
     removeprodialog.ui \

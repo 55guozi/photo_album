@@ -21,7 +21,9 @@ public:
 private:
     Ui::MainWindow *ui;
     QWidget* _protree;
-
+    QWidget* _picshow;
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void SlotCreatePro();

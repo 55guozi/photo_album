@@ -85,7 +85,7 @@ PicShow {
     background : rgb(64,66,68);
 }
 
-#preBtn, #nextBtn, #closeBtn, #playBtn, #slidepreBtn, #slidenextBtn{
+#previousBtn, #nextBtn, #closeBtn, #playBtn, #slidepreBtn, #slidenextBtn{
     border : 0px;
 }
 
