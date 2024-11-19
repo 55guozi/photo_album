@@ -15,6 +15,7 @@ PicShow::PicShow(QWidget *parent)
     ui->nextBtn->SetIcons(":/icon/next.png",
                           ":/icon/next_hover.png",
                           ":/icon/next_press.png");
+    //ui->previousBtn->setStyleSheet("border: none;");
 
     //设置初始透明度
     QGraphicsOpacityEffect* opacity_pre = new QGraphicsOpacityEffect(this);
@@ -34,8 +35,6 @@ PicShow::PicShow(QWidget *parent)
     _animation_show_next->setDuration(500);
     _animation_show_next->setEasingCurve(QEasingCurve::Linear);
 
-    connect(ui->nextBtn,&QPushButton::clicked,this, &PicShow::SigNextClicked);
-    connect(ui->previousBtn,&QPushButton::clicked,this, &PicShow::SigPreClicked);
 }
 
 PicShow::~PicShow()
@@ -46,8 +45,9 @@ PicShow::~PicShow()
 void PicShow::ReloadPic()
 {
     if(_selected_path!=""){
-        auto width = ui->gridLayout->geometry().width() - 20;
-        auto height = ui->gridLayout->geometry().height() - 20;
+
+        auto width = this->width() * 0.8;
+        auto height = this->height() * 0.8;
 
         _pix_map.load(_selected_path);
         _pix_map = _pix_map.scaled(width, height, Qt::KeepAspectRatio);
@@ -108,8 +108,8 @@ void PicShow::SlotDoubleClickItem(const QString &path)
     _selected_path = path;
     _pix_map.load(path);
 
-    auto width = this->width() - 20;
-    auto height = this->height() - 20;
+    auto width = this->width() * 0.8;
+    auto height = this->height() * 0.8;
 
     _pix_map = _pix_map.scaled(width, height, Qt::KeepAspectRatio);
 
@@ -120,8 +120,8 @@ void PicShow::SlotUpdatePic(const QString &path)
 {
     _selected_path = path;
     if(_selected_path!=""){
-        auto width = ui->gridLayout->geometry().width() - 20;
-        auto height = ui->gridLayout->geometry().height() - 20;
+        auto width = this->width() * 0.8;
+        auto height = this->height() * 0.8;
 
         _pix_map.load(_selected_path);
         _pix_map = _pix_map.scaled(width, height, Qt::KeepAspectRatio);

@@ -46,7 +46,7 @@ ProTree{
 }
 
 QLabel#label_pro{
-    color: rpg(231,231,231);
+    color: rgb(231,231,231);
     border-color: #9F9F9F;
     border-style: dotted;
     border-width: 0 0 1px 0;
