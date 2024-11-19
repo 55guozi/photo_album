@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTreeWidget>
+#include "databasemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +23,10 @@ private:
     Ui::MainWindow *ui;
     QWidget* _protree;
     QWidget* _picshow;
+    DatabaseManager* _dbManager;
+
+    void loadFiles(QStringList);
+    QStringList getCurrentFiles();
 protected:
     void resizeEvent(QResizeEvent *event);
 

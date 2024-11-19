@@ -158,7 +158,7 @@ void ProTreeWidget::SlotClosePro(){
 
     if(selecedItem && protreeitem == selecedItem->GetRoot()){
         _selected_item = nullptr;
-        //emit SigClearSelected();
+        emit SigClearSelected();
     }
     delete this->takeTopLevelItem(index_right_btn);
     _right_item = nullptr;

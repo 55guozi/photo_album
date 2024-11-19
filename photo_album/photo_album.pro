@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     confirmpage.cpp \
+    databasemanager.cpp \
     main.cpp \
     mainwindow.cpp \
     opentreethread.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     confirmpage.h \
     const.h \
+    databasemanager.h \
     mainwindow.h \
     opentreethread.h \
     picbutton.h \

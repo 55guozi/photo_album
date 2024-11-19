@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "picshow.h"
 #include "protree.h"
+#include "protreeitem.h"
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
@@ -8,7 +9,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), _protree(nullptr)
+    , ui(new Ui::MainWindow), _protree(nullptr), _dbManager(new DatabaseManager())
 {
     ui->setupUi(this);
 
@@ -45,11 +46,50 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pro_pic_show, &PicShow::SigPreClicked,pro_tree_widget,&ProTreeWidget::SlotPreShow);
     connect(pro_pic_show, &PicShow::SigNextClicked,pro_tree_widget,&ProTreeWidget::SlotNextShow);
     connect(pro_tree_widget,&ProTreeWidget::SigUpdatePic,pro_pic_show,&PicShow::SlotUpdatePic);
+    connect(pro_tree_widget, &ProTreeWidget::SigClearSelected, pro_pic_show, &PicShow::SlotDeleteItem);
+
+    if (_dbManager->connectToDatabase("pic_file_info.db")) {
+        QStringList fileList = _dbManager->loadFileInfo();
+        // 加载文件信息到界面中
+        loadFiles(fileList);
+    }
 }
 
 MainWindow::~MainWindow()
 {
+    // 保存当前文件信息到数据库
+    QStringList fileList = getCurrentFiles();
+    _dbManager->saveFileInfo(fileList);
+
+    delete _dbManager;
     delete ui;
+}
+
+void MainWindow::loadFiles(QStringList files_path)
+{
+    for(QString file_path : files_path){
+        emit SigOpenPro(file_path);
+    }
+}
+
+QStringList MainWindow::getCurrentFiles()
+{
+    QStringList files_path;
+
+    QTreeWidget* tree_widget = static_cast<ProTree*>(_protree)->GetTreeWidget();
+    auto* pro_tree_widget = static_cast<ProTreeWidget*>(tree_widget);
+
+    int topLevelCount = pro_tree_widget->topLevelItemCount();
+
+    for(int i=0; i<topLevelCount; i++){
+        QTreeWidgetItem* topLevelItem = pro_tree_widget->topLevelItem(i);
+        auto* pro_topLevelItem = static_cast<ProTreeItem*>(topLevelItem);
+
+        if (!topLevelItem) continue;
+
+        files_path.append(pro_topLevelItem->GetPath());
+    }
+    return files_path;
 }
 
 void MainWindow::SlotCreatePro()
