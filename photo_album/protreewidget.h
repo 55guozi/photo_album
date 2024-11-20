@@ -6,6 +6,7 @@
 #include "const.h"
 #include "opentreethread.h"
 #include "protreethread.h"
+#include "threadpool.h"
 
 class ProTreeWidget : public QTreeWidget
 {
@@ -26,6 +27,7 @@ private:
     QProgressDialog* _open_progressdlg;
     std::shared_ptr<ProTreeThread> _thread_create_pro;
     std::shared_ptr<OpenTreeThread> _thread_open_pro;
+    ThreadPool *_thread_pool;
 
 private slots:
     void SlotItemPressed(QTreeWidgetItem *item, int column);

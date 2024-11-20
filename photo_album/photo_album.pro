@@ -22,6 +22,7 @@ SOURCES += \
     protreethread.cpp \
     protreewidget.cpp \
     removeprodialog.cpp \
+    threadpool.cpp \
     wizard.cpp
 
 HEADERS += \
@@ -38,6 +39,7 @@ HEADERS += \
     protreethread.h \
     protreewidget.h \
     removeprodialog.h \
+    threadpool.h \
     wizard.h
 
 FORMS += \

@@ -11,7 +11,8 @@
 #include <qfiledialog.h>
 
 ProTreeWidget::ProTreeWidget(QWidget *parent )
-    :QTreeWidget(parent), _right_item(nullptr), _active_item(nullptr), _selected_item(nullptr), _thread_create_pro(nullptr), _dialog_progress(nullptr){
+    :QTreeWidget(parent), _right_item(nullptr), _active_item(nullptr), _selected_item(nullptr)
+    , _thread_create_pro(nullptr), _dialog_progress(nullptr), _thread_pool(new ThreadPool()){
     this->header()->hide();
 
     connect(this, &ProTreeWidget::itemPressed, this, &ProTreeWidget::SlotItemPressed);
@@ -72,7 +73,7 @@ void ProTreeWidget::SlotItemPressed(QTreeWidgetItem *item, int column)
 void ProTreeWidget::SlotImport()
 {
     QFileDialog fileDialog;
-    fileDialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    //fileDialog.setOption(QFileDialog::DontUseNativeDialog, true);
     fileDialog.setFileMode(QFileDialog::Directory);
     fileDialog.setWindowTitle(tr("选择导入文件"));
 
@@ -107,7 +108,9 @@ void ProTreeWidget::SlotImport()
     connect(_dialog_progress, &QProgressDialog::canceled, this, &ProTreeWidget::SlotCancelProgress);
     connect(this, &ProTreeWidget::SigCancelProgress, _thread_create_pro.get(), &ProTreeThread::SlotCancelProgress);
 
-    _thread_create_pro->start();
+    auto b = _thread_pool->enqueue([this](){
+        this->_thread_create_pro.get()->run();
+    });
 
     _dialog_progress->setWindowTitle("Please Wait...");
     _dialog_progress->setFixedWidth(PROGRESS_WIDTH);
@@ -215,7 +218,9 @@ void ProTreeWidget::SlotOpenPro(const QString& path){
 
     connect(this, &ProTreeWidget::SigCancelOpenProgress, _thread_open_pro.get(), &OpenTreeThread::SlotCancelOpenProgress);
 
-    _thread_open_pro->start();
+    auto b = _thread_pool->enqueue([this](){
+        this->_thread_open_pro.get()->run();
+    });
     _open_progressdlg->setWindowTitle("Please wait...");
     _open_progressdlg->setFixedWidth(PROGRESS_WIDTH);
     _open_progressdlg->setRange(0, PROGRESS_MAX);

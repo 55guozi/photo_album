@@ -7,7 +7,7 @@
 
  OpenTreeThread::OpenTreeThread(const QString& src_path, int file_count,
                                QTreeWidget* self, QObject *parent)
-    :_bstop(false), _src_path(src_path), _file_count(file_count), _self(self), _root(nullptr), QThread(parent){
+    :_bstop(false), _src_path(src_path), _file_count(file_count), _self(self), _root(nullptr), QObject(parent){
 
  }
 

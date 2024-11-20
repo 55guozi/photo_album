@@ -4,15 +4,14 @@
 #include <QThread>
 #include <QTreeWidget>
 
-class OpenTreeThread : public QThread
+class OpenTreeThread : public QObject
 {
     Q_OBJECT
 public:
     explicit OpenTreeThread(const QString& src_path, int file_count,
                             QTreeWidget* self, QObject *parent = nullptr);
     void OpenProTree(const QString& src_path, int& file_count, QTreeWidget* self);
-protected:
-    void run() override;
+    void run();
 private:
     void RecursiveProTree(const QString& src_path, int& file_count, QTreeWidget* self,
                           QTreeWidgetItem* root, QTreeWidgetItem* parent, QTreeWidgetItem* preitem);

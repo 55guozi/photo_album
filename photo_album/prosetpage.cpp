@@ -64,7 +64,7 @@ bool ProSetPage::isComplete() const
 void ProSetPage::on_pushButton_clicked()
 {
     QFileDialog file_dialog;
-    file_dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    //file_dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     file_dialog.setFileMode(QFileDialog::Directory);
     file_dialog.setWindowTitle("选择要导入的文件");
     file_dialog.setDirectory(QDir::currentPath());

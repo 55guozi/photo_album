@@ -7,14 +7,10 @@
 
 ProTreeThread::ProTreeThread(const QString &src_path, const QString& dist_path, QTreeWidgetItem* parent_item,
                              int file_count, QTreeWidget* self, QTreeWidgetItem* root, QObject* parent)
-    :_src_path(src_path), _dist_path(dist_path), _parent_item(parent_item), _file_count(file_count), _self(self), _root(root), _bstop(false), QThread(parent){
+    :_src_path(src_path), _dist_path(dist_path), _parent_item(parent_item), _file_count(file_count), _self(self), _root(root), _bstop(false), QObject(parent){
 
 }
 ProTreeThread::~ProTreeThread(){
-    if (isRunning()) {
-        quit();    // 请求线程退出
-        wait();    // 等待线程退出完成
-    }
 }
 void ProTreeThread::run(){
     CreateProTree(_src_path, _dist_path, _parent_item, _file_count, _self, _root, nullptr);

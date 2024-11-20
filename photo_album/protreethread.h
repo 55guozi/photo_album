@@ -4,14 +4,13 @@
 #include <QThread>
 #include <QTreeWidgetItem>
 
-class ProTreeThread : public QThread
+class ProTreeThread : public QObject
 {
     Q_OBJECT
 public:
     ProTreeThread(const QString &src_path, const QString& dist_path, QTreeWidgetItem* parent_item,
                   int file_count, QTreeWidget* self, QTreeWidgetItem* root, QObject* parent = nullptr);
     ~ProTreeThread();
-protected:
     virtual void run();
 private:
     QString _src_path;
