@@ -97,7 +97,7 @@ SlideShowDlg {
 #preListWidget{
     color:rgb(231,231,231);
     background-color:rgb(46,47,48);
-    boeder: 0px;
+    border: 0px;
 }
 
 #preListWidget::item:hover{

@@ -5,6 +5,7 @@
 #include "qheaderview.h"
 #include "removeprodialog.h"
 
+#include <QApplication>
 #include <QDir>
 #include <QGuiApplication>
 #include <QMenu>
@@ -12,7 +13,7 @@
 
 ProTreeWidget::ProTreeWidget(QWidget *parent )
     :QTreeWidget(parent), _right_item(nullptr), _active_item(nullptr), _selected_item(nullptr)
-    , _thread_create_pro(nullptr), _dialog_progress(nullptr), _thread_pool(new ThreadPool()){
+    , _dialog_progress(nullptr), _thread_create_pro(nullptr), _thread_pool(new ThreadPool()){
     this->header()->hide();
 
     connect(this, &ProTreeWidget::itemPressed, this, &ProTreeWidget::SlotItemPressed);
@@ -24,6 +25,7 @@ ProTreeWidget::ProTreeWidget(QWidget *parent )
     connect(_action_import, &QAction::triggered, this, &ProTreeWidget::SlotImport);
     connect(_action_setstart, &QAction::triggered, this, &ProTreeWidget::SlotSetActive);
     connect(_action_closepro, &QAction::triggered, this, &ProTreeWidget::SlotClosePro);
+    connect(_action_slideshow, &QAction::triggered, this, &ProTreeWidget::SlotSlideShow);
 
     connect(this, &ProTreeWidget::itemDoubleClicked, this, &ProTreeWidget::SlotDoubleClickItem);
 }
@@ -269,6 +271,31 @@ void ProTreeWidget::SlotDoubleClickItem(QTreeWidgetItem *item, int column){
     }
 }
 
+void ProTreeWidget::SlotSlideShow()
+{
+    if(!_right_item){
+        return;
+    }
+
+    auto* _right_pro_item = static_cast<ProTreeItem*>(_right_item);
+
+    auto* last_child_item = _right_pro_item->GetLastPicChild();
+    if(!last_child_item){
+        return;
+    }
+
+    auto* first_child_item = _right_pro_item->GetFirstPicChild();
+    if(!first_child_item){
+        return;
+    }
+
+    _slide_show_dlg = std::make_shared<SlideShowDlg>(this, first_child_item, last_child_item);
+    _slide_show_dlg->setModal(true);
+    _slide_show_dlg->setWindowFlags(Qt::Dialog|Qt::FramelessWindowHint);
+    //_slide_show_dlg->setStyleSheet("QDialog { border: none; }");
+    _slide_show_dlg->showFullScreen();
+}
+
 void ProTreeWidget::SlotPreShow(){
     if(!_selected_item){
         return;
@@ -295,4 +322,43 @@ void ProTreeWidget::SlotNextShow(){
     emit SigUpdatePic(curItem->GetPath());
     _selected_item = curItem;
     this->setCurrentItem(curItem);
+}
+
+void ProTreeWidget::SlotSetMusic()
+{
+    QFileDialog file_dialog;
+    file_dialog.setFileMode(QFileDialog::ExistingFiles);
+    file_dialog.setWindowTitle(tr("选择音频文件"));
+    file_dialog.setDirectory(QDir::current());
+    file_dialog.setViewMode(QFileDialog::Detail);
+    file_dialog.setNameFilter("(*.mp3)");
+    if (file_dialog.exec()) {
+        // 获取用户选择的文件
+        QStringList filenames = file_dialog.selectedFiles();
+
+        // 清空当前播放列表，并添加新的文件路径
+        _playlist.clear();
+        _playlist = filenames;
+
+        // 设置 QMediaPlayer 的源为第一个文件
+        if (!_playlist.isEmpty()) {
+            _player->setSource(QUrl::fromLocalFile(_playlist.first()));
+        }
+    }
+}
+
+void ProTreeWidget::SlotStartMusic()
+{
+    if(!_playlist.isEmpty()){
+        qDebug("music playing");
+        _player->play();
+    }
+}
+
+void ProTreeWidget::SlotStopMusic()
+{
+    if(!_playlist.isEmpty()){
+        qDebug("music stop");
+        _player->stop();
+    }
 }

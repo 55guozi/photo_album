@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,14 +14,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     opentreethread.cpp \
+    picanimation.cpp \
     picbutton.cpp \
     picshow.cpp \
+    picstatebtn.cpp \
+    prelistitem.cpp \
+    prelistwid.cpp \
     prosetpage.cpp \
     protree.cpp \
     protreeitem.cpp \
     protreethread.cpp \
     protreewidget.cpp \
     removeprodialog.cpp \
+    slideshowdlg.cpp \
     threadpool.cpp \
     wizard.cpp
 
@@ -31,14 +36,19 @@ HEADERS += \
     databasemanager.h \
     mainwindow.h \
     opentreethread.h \
+    picanimation.h \
     picbutton.h \
     picshow.h \
+    picstatebtn.h \
+    prelistitem.h \
+    prelistwid.h \
     prosetpage.h \
     protree.h \
     protreeitem.h \
     protreethread.h \
     protreewidget.h \
     removeprodialog.h \
+    slideshowdlg.h \
     threadpool.h \
     wizard.h
 
@@ -49,6 +59,7 @@ FORMS += \
     prosetpage.ui \
     protree.ui \
     removeprodialog.ui \
+    slideshowdlg.ui \
     wizard.ui
 
 # Default rules for deployment.
